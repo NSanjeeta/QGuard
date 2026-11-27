@@ -1,0 +1,6 @@
+sensor_id,records_checked,presence_detections,no_presence_records,unknown_presence_records,presence_detection_percent,presence_started_events,presence_ended_events,total_presence_transitions,distance_available_records,mean_detected_target_distance_m,minimum_detected_target_distance_m,maximum_detected_target_distance_m,presence_distance_inconsistencies
+S1,200,10,190,0,5.0,1,1,2,10,4.139,4.01,4.23,0
+S2,200,18,182,0,9.0,2,2,4,18,3.8362222222222218,2.78,4.27,0
+S3,200,15,185,0,7.5,4,4,8,55,3.5360000000000005,2.27,4.29,40
+S4,200,0,200,0,0.0,0,0,0,0,,,,0
+S5,200,6,194,0,3.0,1,1,2,6,4.1433333333333335,4.02,4.26,0

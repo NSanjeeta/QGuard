@@ -1,0 +1,6 @@
+sensor_id,records_checked,average_battery_percent,minimum_battery_percent,maximum_battery_percent,first_record_battery_percent,last_record_battery_percent,net_battery_change_percentage_points,normal_records,warning_records,critical_records,unknown_records,normal_severity_records,warning_severity_records,critical_severity_records,rapid_drop_events,maximum_single_cycle_drop_percentage_points
+S1,200,96.4921,93.86,99.01,98.89,94.04,-4.849999999999994,200,0,0,0,200,0,0,0,0.37000000000000455
+S2,200,96.48734999999999,93.97,99.01,98.86,94.1,-4.760000000000005,200,0,0,0,200,0,0,0,0.29999999999999716
+S3,200,96.4852,94.0,99.09,98.88,94.0,-4.8799999999999955,200,0,0,0,200,0,0,0,0.4199999999999875
+S4,200,96.48305,93.98,98.95,98.89,94.0,-4.890000000000001,200,0,0,0,200,0,0,0,0.35999999999999943
+S5,200,61.015,23.0,99.03,99.03,23.0,-76.03,181,19,0,0,181,19,0,0,0.39000000000000057

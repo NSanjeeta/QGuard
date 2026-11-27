@@ -1,0 +1,52 @@
+QUANTUMGUARD - DATA VALIDATION REPORT
+============================================================
+
+Input file: C:\Users\sanje\OneDrive\Desktop\QuantumGuard\data\QGuard_dataset.csv
+Rows: 1000
+Columns: 14
+
+STRUCTURAL VALIDATION
+------------------------------------------------------------
+All expected columns are present.
+
+DATA QUALITY CHECKS
+------------------------------------------------------------
+row_count: 1000
+column_count: 14
+duplicate_full_rows: 0
+duplicate_sensor_cycle_pairs: 0
+sensor_ids_found: ['S1', 'S2', 'S3', 'S4', 'S5']
+unexpected_sensor_ids: []
+records_per_sensor: {'S1': 200, 'S2': 200, 'S3': 200, 'S4': 200, 'S5': 200}
+minimum_cycle: 1
+maximum_cycle: 200
+missing_cycle_values: 0
+missing_or_invalid_timestamps: 0
+unique_timestamps: 34
+missing_values_by_column: {'cycle': 0, 'timestamp': 0, 'sensor_id': 0, 'sensor_name': 0, 'sensor_type': 0, 'zone_id': 0, 'reading_value': 0, 'presence_state': 0, 'target_distance_m': 911, 'packet_rate_ppm': 0, 'response_time_ms': 0, 'battery_percent': 0, 'rssi_dbm': 0, 'missed_messages': 0}
+invalid_presence_states: 0
+presence_state_counts: {np.int64(0): 951, np.int64(1): 49}
+battery_out_of_range: 0
+negative_response_times: 0
+negative_packet_rate_values: 0
+negative_missed_message_counts: 0
+negative_target_distances: 0
+no_presence_and_missing_distance: 911
+presence_but_missing_distance: 0
+no_presence_but_distance_recorded: 40
+presence_with_distance_recorded: 49
+maximum_target_distance_m: 4.29
+
+FLAGGED RECORDS
+------------------------------------------------------------
+Flagged record count: 40
+Flagged records are retained for review. They are not automatically deleted.
+
+PREPROCESSING DECISIONS
+------------------------------------------------------------
+1. Original dataset is not overwritten.
+2. Missing target distances are preserved.
+3. reading_value is retained without assuming its unit.
+4. Suspicious records are flagged, not deleted.
+5. No feature scaling, imputation or ML training is performed in this phase.
+6. Timestamp format used: DD-MM-YYYY HH:MM.

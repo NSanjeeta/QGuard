@@ -1,0 +1,29 @@
+communication:
+  rssi_warning_dbm: -75
+  rssi_critical_dbm: -85
+
+  response_warning_ms: 90
+  response_critical_ms: 120
+
+  missed_messages_warning: 2
+  missed_messages_critical: 5
+
+  recent_gap_window_cycles: 5
+
+  expected_reporting_interval_seconds: null
+  heartbeat_timeout_seconds: null
+
+battery:
+  low_percent: 30
+  critical_percent: 20
+
+  rapid_drop_warning: 2
+  rapid_drop_critical: 5
+
+statistical:
+  rolling_window: 5
+  multiplier: 3
+
+detection:
+  expected_reporting_interval_seconds: null
+  heartbeat_timeout_seconds: null

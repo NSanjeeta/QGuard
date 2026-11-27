@@ -1,0 +1,6 @@
+sensor_id,own_footprint_area_m2,covered_by_other_four_m2,uncovered_if_isolated_m2,redundancy_percentage
+S1,58.09,40.478,17.613,69.681
+S2,58.09,39.563,18.528,68.106
+S3,58.09,58.09,0.0,100.0
+S4,57.965,39.078,18.888,67.416
+S5,57.965,39.863,18.103,68.77

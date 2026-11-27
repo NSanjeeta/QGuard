@@ -1,0 +1,6 @@
+sensor_id,cycles_checked,healthy_cycles,degraded_cycles,intermittent_cycles,isolated_cycles,warning_cycles,critical_cycles,average_rssi_dbm,average_response_time_ms,total_recorded_missed_messages,minimum_rssi_dbm,maximum_response_time_ms
+S1,200,197,3,0,0,3,0,-47.985,60.15905,4,-54,96.88
+S2,200,198,2,0,0,2,0,-55.07,66.3412,3,-63,99.32
+S3,200,135,65,0,0,58,7,-66.49,73.72314999999999,151,-84,103.7
+S4,200,193,7,0,0,7,0,-55.9,68.2409,3,-62,98.07
+S5,200,200,0,0,0,0,0,-49.245,60.425200000000004,4,-56,89.23

@@ -1,0 +1,78 @@
+cycle,sensor_id,communication_status,communication_severity,communication_reason,threshold_flags,warning_indicator_count,critical_indicator_count,record_received,missing_cycle_record,rssi_dbm,response_time_ms,missed_messages
+3,S3,DEGRADED,WARNING,High response time (90.96 ms),High response time (90.96 ms),1,0,1,0,-64,90.96,0
+5,S4,DEGRADED,WARNING,High response time (96.62 ms),High response time (96.62 ms),1,0,1,0,-56,96.62,0
+6,S3,DEGRADED,WARNING,High response time (93.82 ms),High response time (93.82 ms),1,0,1,0,-64,93.82,0
+8,S3,DEGRADED,WARNING,High response time (92.67 ms),High response time (92.67 ms),1,0,1,0,-62,92.67,0
+10,S2,DEGRADED,WARNING,High response time (94.1 ms),High response time (94.1 ms),1,0,1,0,-54,94.1,0
+10,S3,DEGRADED,WARNING,High response time (90.67 ms),High response time (90.67 ms),1,0,1,0,-60,90.67,0
+16,S3,DEGRADED,WARNING,High response time (94.32 ms),High response time (94.32 ms),1,0,1,0,-61,94.32,0
+20,S4,DEGRADED,WARNING,High response time (91.63 ms),High response time (91.63 ms),1,0,1,0,-54,91.63,0
+21,S1,DEGRADED,WARNING,High response time (94.12 ms),High response time (94.12 ms),1,0,1,0,-47,94.12,0
+28,S3,DEGRADED,WARNING,High response time (101.96 ms),High response time (101.96 ms),1,0,1,0,-61,101.96,0
+29,S1,DEGRADED,WARNING,High response time (94.02 ms),High response time (94.02 ms),1,0,1,0,-48,94.02,0
+29,S3,DEGRADED,WARNING,High response time (91.24 ms),High response time (91.24 ms),1,0,1,0,-61,91.24,0
+37,S3,DEGRADED,WARNING,High response time (97.44 ms),High response time (97.44 ms),1,0,1,0,-66,97.44,0
+42,S4,DEGRADED,WARNING,High response time (93.08 ms),High response time (93.08 ms),1,0,1,0,-54,93.08,0
+44,S3,DEGRADED,WARNING,High response time (95.1 ms),High response time (95.1 ms),1,0,1,0,-62,95.1,0
+46,S3,DEGRADED,WARNING,High response time (97.21 ms),High response time (97.21 ms),1,0,1,0,-65,97.21,0
+47,S3,DEGRADED,WARNING,High response time (100.06 ms),High response time (100.06 ms),1,0,1,0,-58,100.06,0
+48,S4,DEGRADED,WARNING,High response time (98.07 ms),High response time (98.07 ms),1,0,1,0,-54,98.07,0
+63,S3,DEGRADED,WARNING,High response time (103.7 ms),High response time (103.7 ms),1,0,1,0,-65,103.7,0
+68,S3,DEGRADED,WARNING,High response time (93.61 ms),High response time (93.61 ms),1,0,1,0,-58,93.61,0
+71,S3,DEGRADED,WARNING,High response time (95.43 ms),High response time (95.43 ms),1,0,1,0,-58,95.43,0
+73,S3,DEGRADED,WARNING,High response time (102.55 ms),High response time (102.55 ms),1,0,1,0,-61,102.55,0
+76,S4,DEGRADED,WARNING,High response time (95.44 ms),High response time (95.44 ms),1,0,1,0,-57,95.44,0
+79,S2,DEGRADED,WARNING,High response time (99.32 ms),High response time (99.32 ms),1,0,1,0,-54,99.32,0
+90,S4,DEGRADED,WARNING,High response time (91.78 ms),High response time (91.78 ms),1,0,1,0,-55,91.78,0
+103,S3,DEGRADED,WARNING,High response time (91.36 ms),High response time (91.36 ms),1,0,1,0,-61,91.36,0
+109,S3,DEGRADED,WARNING,High response time (90.01 ms),High response time (90.01 ms),1,0,1,0,-68,90.01,0
+113,S3,DEGRADED,WARNING,High response time (95.84 ms),High response time (95.84 ms),1,0,1,0,-64,95.84,0
+114,S4,DEGRADED,WARNING,High response time (93.85 ms),High response time (93.85 ms),1,0,1,0,-52,93.85,0
+120,S3,DEGRADED,WARNING,High response time (90.11 ms),High response time (90.11 ms),1,0,1,0,-67,90.11,0
+130,S3,DEGRADED,WARNING,High response time (101.7 ms),High response time (101.7 ms),1,0,1,0,-66,101.7,0
+138,S3,DEGRADED,WARNING,High response time (92.35 ms),High response time (92.35 ms),1,0,1,0,-70,92.35,0
+145,S3,DEGRADED,WARNING,Weak RSSI (-76 dBm),Weak RSSI (-76 dBm),1,0,1,0,-76,88.29,0
+158,S3,DEGRADED,WARNING,Elevated missed messages (2),Elevated missed messages (2),1,0,1,0,-68,45.76,2
+159,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); Elevated missed messages (2),Weak RSSI (-75 dBm); Elevated missed messages (2),2,0,1,0,-75,76.61,2
+160,S3,DEGRADED,WARNING,Elevated missed messages (2),Elevated missed messages (2),1,0,1,0,-72,69.51,2
+161,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); Elevated missed messages (2),Weak RSSI (-75 dBm); Elevated missed messages (2),2,0,1,0,-75,52.19,2
+162,S3,DEGRADED,WARNING,Elevated missed messages (2),Elevated missed messages (2),1,0,1,0,-73,53.4,2
+163,S3,DEGRADED,WARNING,Elevated missed messages (2),Elevated missed messages (2),1,0,1,0,-74,81.31,2
+164,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); Elevated missed messages (2),Weak RSSI (-75 dBm); Elevated missed messages (2),2,0,1,0,-75,73.88,2
+165,S3,DEGRADED,WARNING,Weak RSSI (-78 dBm); Elevated missed messages (2),Weak RSSI (-78 dBm); Elevated missed messages (2),2,0,1,0,-78,69.6,2
+166,S3,DEGRADED,WARNING,Elevated missed messages (2),Elevated missed messages (2),1,0,1,0,-73,84.29,2
+167,S3,DEGRADED,WARNING,Weak RSSI (-77 dBm); Elevated missed messages (2),Weak RSSI (-77 dBm); Elevated missed messages (2),2,0,1,0,-77,79.08,2
+168,S3,DEGRADED,WARNING,Weak RSSI (-76 dBm); High response time (92.07 ms); Elevated missed messages (2),Weak RSSI (-76 dBm); High response time (92.07 ms); Elevated missed messages (2),3,0,1,0,-76,92.07,2
+169,S3,DEGRADED,WARNING,Weak RSSI (-78 dBm); Elevated missed messages (2),Weak RSSI (-78 dBm); Elevated missed messages (2),2,0,1,0,-78,64.65,2
+170,S3,DEGRADED,WARNING,Elevated missed messages (3),Elevated missed messages (3),1,0,1,0,-72,63.37,3
+171,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); High response time (95.66 ms); Elevated missed messages (3),Weak RSSI (-75 dBm); High response time (95.66 ms); Elevated missed messages (3),3,0,1,0,-75,95.66,3
+172,S3,DEGRADED,WARNING,Weak RSSI (-78 dBm); Elevated missed messages (3),Weak RSSI (-78 dBm); Elevated missed messages (3),2,0,1,0,-78,80.34,3
+173,S3,DEGRADED,WARNING,Weak RSSI (-79 dBm); Elevated missed messages (3),Weak RSSI (-79 dBm); Elevated missed messages (3),2,0,1,0,-79,66.93,3
+174,S3,DEGRADED,WARNING,Weak RSSI (-77 dBm); Elevated missed messages (3),Weak RSSI (-77 dBm); Elevated missed messages (3),2,0,1,0,-77,66.59,3
+175,S3,DEGRADED,WARNING,Elevated missed messages (3),Elevated missed messages (3),1,0,1,0,-74,49.86,3
+176,S3,DEGRADED,WARNING,Elevated missed messages (3),Elevated missed messages (3),1,0,1,0,-74,69.84,3
+177,S3,DEGRADED,WARNING,Elevated missed messages (3),Elevated missed messages (3),1,0,1,0,-73,78.48,3
+178,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); Elevated missed messages (3),Weak RSSI (-75 dBm); Elevated missed messages (3),2,0,1,0,-75,66.83,3
+179,S3,DEGRADED,WARNING,Weak RSSI (-77 dBm); Elevated missed messages (3),Weak RSSI (-77 dBm); Elevated missed messages (3),2,0,1,0,-77,51.35,3
+180,S3,DEGRADED,WARNING,Weak RSSI (-79 dBm); Elevated missed messages (3),Weak RSSI (-79 dBm); Elevated missed messages (3),2,0,1,0,-79,75.73,3
+181,S3,DEGRADED,WARNING,Weak RSSI (-76 dBm); Elevated missed messages (3),Weak RSSI (-76 dBm); Elevated missed messages (3),2,0,1,0,-76,84.03,3
+182,S3,DEGRADED,WARNING,Weak RSSI (-81 dBm); Elevated missed messages (4),Weak RSSI (-81 dBm); Elevated missed messages (4),2,0,1,0,-81,67.84,4
+183,S3,DEGRADED,WARNING,Elevated missed messages (4),Elevated missed messages (4),1,0,1,0,-74,67.08,4
+184,S3,DEGRADED,WARNING,Weak RSSI (-75 dBm); High response time (91.1 ms); Elevated missed messages (4),Weak RSSI (-75 dBm); High response time (91.1 ms); Elevated missed messages (4),3,0,1,0,-75,91.1,4
+185,S3,DEGRADED,WARNING,Weak RSSI (-78 dBm); Elevated missed messages (4),Weak RSSI (-78 dBm); Elevated missed messages (4),2,0,1,0,-78,70.57,4
+186,S3,DEGRADED,WARNING,Weak RSSI (-82 dBm); Elevated missed messages (4),Weak RSSI (-82 dBm); Elevated missed messages (4),2,0,1,0,-82,54.98,4
+187,S3,DEGRADED,WARNING,Weak RSSI (-77 dBm); Elevated missed messages (4),Weak RSSI (-77 dBm); Elevated missed messages (4),2,0,1,0,-77,52.29,4
+188,S3,DEGRADED,WARNING,Weak RSSI (-78 dBm); Elevated missed messages (4),Weak RSSI (-78 dBm); Elevated missed messages (4),2,0,1,0,-78,75.68,4
+189,S1,DEGRADED,WARNING,High response time (96.88 ms),High response time (96.88 ms),1,0,1,0,-47,96.88,0
+189,S3,DEGRADED,WARNING,Weak RSSI (-79 dBm); Elevated missed messages (4),Weak RSSI (-79 dBm); Elevated missed messages (4),2,0,1,0,-79,65.05,4
+190,S3,DEGRADED,WARNING,Weak RSSI (-81 dBm); Elevated missed messages (4),Weak RSSI (-81 dBm); Elevated missed messages (4),2,0,1,0,-81,78.24,4
+191,S3,DEGRADED,WARNING,Weak RSSI (-80 dBm); Elevated missed messages (4),Weak RSSI (-80 dBm); Elevated missed messages (4),2,0,1,0,-80,69.81,4
+192,S3,DEGRADED,WARNING,Weak RSSI (-82 dBm); Elevated missed messages (4),Weak RSSI (-82 dBm); Elevated missed messages (4),2,0,1,0,-82,85.1,4
+193,S3,DEGRADED,WARNING,Weak RSSI (-81 dBm); Elevated missed messages (4),Weak RSSI (-81 dBm); Elevated missed messages (4),2,0,1,0,-81,68.48,4
+194,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-81 dBm),Critical missed messages (5); Weak RSSI (-81 dBm),1,1,1,0,-81,87.97,5
+195,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-84 dBm),Critical missed messages (5); Weak RSSI (-84 dBm),1,1,1,0,-84,78.32,5
+196,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-78 dBm),Critical missed messages (5); Weak RSSI (-78 dBm),1,1,1,0,-78,72.11,5
+197,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-78 dBm),Critical missed messages (5); Weak RSSI (-78 dBm),1,1,1,0,-78,60.45,5
+198,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-79 dBm),Critical missed messages (5); Weak RSSI (-79 dBm),1,1,1,0,-79,89.27,5
+199,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-80 dBm),Critical missed messages (5); Weak RSSI (-80 dBm),1,1,1,0,-80,80.15,5
+200,S3,DEGRADED,CRITICAL,Critical missed messages (5); Weak RSSI (-81 dBm),Critical missed messages (5); Weak RSSI (-81 dBm),1,1,1,0,-81,55.69,5
