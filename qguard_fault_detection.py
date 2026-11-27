@@ -7,8 +7,9 @@ Run from the QuantumGuard project root:
 
 Inputs:
     data/processed/qguard_features.csv
-    data/processed/qguard_fault_detection_status.csv
-        (used only as the existing communication-status source)
+    data/processed/qguard_communication_status.csv
+    data/processed/QGuard_dataset2.csv
+        (UART and ESP32-to-backend connectivity simulation)
     data/processed/qguard_battery_status.csv
     data/processed/qguard_motion_status.csv
 
@@ -40,7 +41,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
 
 FEATURE_FILE = DATA_DIR / "qguard_features.csv"
-COMMUNICATION_SOURCE_FILE = DATA_DIR / "qguard_fault_detection_status.csv"
+COMMUNICATION_SOURCE_FILE = DATA_DIR / "qguard_communication_status.csv"
+CONNECTIVITY_FILE = DATA_DIR / "QGuard_dataset2.csv"
 BATTERY_FILE = DATA_DIR / "qguard_battery_status.csv"
 MOTION_FILE = DATA_DIR / "qguard_motion_status.csv"
 
@@ -120,14 +122,41 @@ def load_inputs():
         }
     )
 
-    return features, comm, battery, motion
+    connectivity = read_csv(
+        CONNECTIVITY_FILE,
+        [
+            "sensor_id", "cycle", "uart_frames_expected",
+            "uart_frames_received", "uart_invalid_frames",
+            "uart_connection_status", "backend_heartbeat_expected",
+            "backend_heartbeat_ack_received",
+            "consecutive_missed_backend_heartbeats",
+            "last_successful_backend_ack_cycle", "esp32_backend_status",
+            "isolation_status", "simulation_scenario"
+        ]
+    )
+
+    connectivity_cols = [
+        "sensor_id", "cycle", "uart_frames_expected",
+        "uart_frames_received", "uart_invalid_frames",
+        "uart_connection_status", "backend_heartbeat_expected",
+        "backend_heartbeat_ack_received",
+        "consecutive_missed_backend_heartbeats",
+        "last_successful_backend_ack_cycle", "esp32_backend_status",
+        "isolation_status", "simulation_scenario"
+    ]
+    connectivity = connectivity[connectivity_cols].copy()
+
+    return features, comm, battery, motion, connectivity
 
 
-def merge_sources(features, comm, battery, motion):
+def merge_sources(features, comm, battery, motion, connectivity):
     # Use the feature dataset as the row backbone, then left-join monitor outputs.
     df = features.merge(comm, on=KEYS, how="left", validate="one_to_one")
     df = df.merge(battery, on=KEYS, how="left", validate="one_to_one")
     df = df.merge(motion, on=KEYS, how="left", validate="one_to_one")
+    df = df.merge(
+        connectivity, on=KEYS, how="left", validate="one_to_one"
+    )
 
     # The feature dataset may already contain a column with the same
     # meaning. Use the motion-monitor value explicitly for the diagnostic
@@ -135,6 +164,10 @@ def merge_sources(features, comm, battery, motion):
     df["communication_record_available"] = df["communication_status"].notna().astype(int)
     df["battery_record_available"] = df["battery_status"].notna().astype(int)
     df["motion_record_available"] = df["presence_distance_inconsistency"].notna().astype(int)
+    df["connectivity_record_available"] = (
+        df["uart_connection_status"].notna()
+        & df["esp32_backend_status"].notna()
+    ).astype(int)
 
     # Explicitly create expected sensor-cycle grid to expose missing feature rows.
     cycles = sorted(features["cycle"].dropna().unique().tolist())
@@ -161,6 +194,9 @@ def merge_sources(features, comm, battery, motion):
     grid["motion_record_available"] = (
         grid["motion_record_available"].fillna(0).astype(int)
     )
+    grid["connectivity_record_available"] = (
+        grid["connectivity_record_available"].fillna(0).astype(int)
+    )
 
     return grid.sort_values(KEYS).reset_index(drop=True)
 
@@ -178,6 +214,40 @@ def normalise_and_flag(df):
     ).astype(int)
     df["communication_isolated_flag"] = (
         comm_missing | df["communication_status"].eq("ISOLATED")
+    ).astype(int)
+
+    # Connectivity simulation provides two separate links:
+    # sensor-to-ESP32 UART and ESP32-to-backend heartbeat.
+    uart = df["uart_connection_status"].astype("string").str.upper().str.strip()
+    backend = df["esp32_backend_status"].astype("string").str.upper().str.strip()
+    isolation = df["isolation_status"].astype("string").str.upper().str.strip()
+    df["uart_connection_status"] = uart.fillna("UNKNOWN")
+    df["esp32_backend_status"] = backend.fillna("UNKNOWN")
+    df["isolation_status"] = isolation.fillna("UNKNOWN")
+
+    # RECOVERING is retained as a recovery state, not counted as a new
+    # interruption. The explicit UART status is the primary classification.
+    df["uart_interruption_flag"] = (
+        df["uart_connection_status"].isin(
+            ["DISCONNECTED", "NO_VALID_DATA", "INTERRUPTED"]
+        )
+    ).astype(int)
+    df["backend_isolation_flag"] = (
+        df["esp32_backend_status"].eq("ISOLATED")
+        | df["isolation_status"].eq("ISOLATED")
+    ).astype(int)
+    df["backend_suspected_isolation_flag"] = (
+        df["esp32_backend_status"].eq("SUSPECTED_ISOLATION")
+        | df["isolation_status"].eq("SUSPECTED_ISOLATION")
+    ).astype(int)
+    df["backend_interruption_flag"] = (
+        df["esp32_backend_status"].isin(
+            ["TEMPORARY_INTERRUPTION", "RECOVERING"]
+        )
+        | df["isolation_status"].eq("RECOVERING")
+    ).astype(int)
+    df["connectivity_unknown_flag"] = (
+        df["connectivity_record_available"].eq(0)
     ).astype(int)
 
     battery = df["battery_status"].astype("string").str.upper().str.strip()
@@ -265,11 +335,25 @@ def normalise_and_flag(df):
     df.loc[df["data_inconsistency_flag"].eq(1), "data_fault"] = "INCONSISTENCY"
     df.loc[df["data_unknown_flag"].eq(1), "data_fault"] = "UNKNOWN"
 
+    df["uart_diagnosis"] = "UART_CONNECTED"
+    df.loc[df["uart_interruption_flag"].eq(1), "uart_diagnosis"] = "LOCAL_UART_INTERRUPTION"
+    df.loc[df["connectivity_unknown_flag"].eq(1), "uart_diagnosis"] = "UART_STATUS_UNKNOWN"
+
+    df["backend_diagnosis"] = "BACKEND_CONNECTED"
+    df.loc[df["backend_interruption_flag"].eq(1), "backend_diagnosis"] = "BACKEND_INTERRUPTION_OR_RECOVERY"
+    df.loc[df["backend_suspected_isolation_flag"].eq(1), "backend_diagnosis"] = "BACKEND_ISOLATION_SUSPECTED"
+    df.loc[df["backend_isolation_flag"].eq(1), "backend_diagnosis"] = "BACKEND_ISOLATION_CONFIRMED"
+    df.loc[df["connectivity_unknown_flag"].eq(1), "backend_diagnosis"] = "BACKEND_STATUS_UNKNOWN"
+
     df["any_fault_flag"] = (
         df["communication_degraded_flag"].eq(1)
         | df["communication_isolated_flag"].eq(1)
         | df["battery_fault_flag"].eq(1)
         | df["data_inconsistency_flag"].eq(1)
+        | df["uart_interruption_flag"].eq(1)
+        | df["backend_isolation_flag"].eq(1)
+        | df["backend_suspected_isolation_flag"].eq(1)
+        | df["backend_interruption_flag"].eq(1)
     ).astype(int)
 
     def overall(row):
@@ -282,12 +366,21 @@ def normalise_and_flag(df):
             active.append("BATTERY_PROBLEM")
         if row["data_inconsistency_flag"]:
             active.append("DATA_INCONSISTENCY")
+        if row["uart_interruption_flag"]:
+            active.append("LOCAL_UART_INTERRUPTION")
+        if row["backend_isolation_flag"]:
+            active.append("BACKEND_ISOLATION")
+        elif row["backend_suspected_isolation_flag"]:
+            active.append("BACKEND_ISOLATION_SUSPECTED")
+        elif row["backend_interruption_flag"]:
+            active.append("BACKEND_INTERRUPTION_OR_RECOVERY")
         if active:
             return " + ".join(active)
         if (
             row["communication_record_available"] == 0
             or row["battery_unknown_flag"] == 1
             or row["data_unknown_flag"] == 1
+            or row["connectivity_unknown_flag"] == 1
         ):
             return "INCOMPLETE_DIAGNOSTIC_DATA"
         return "HEALTHY"
@@ -436,6 +529,26 @@ def make_summary(df, events):
             ("DATA_STATUS_UNKNOWN" if group["data_unknown_flag"].any() else "DATA_NORMAL")
         )
 
+        uart_cycles = group.loc[group["uart_interruption_flag"].eq(1), "cycle"].astype(int).tolist()
+        backend_isolation_cycles = group.loc[group["backend_isolation_flag"].eq(1), "cycle"].astype(int).tolist()
+        backend_suspected_cycles = group.loc[group["backend_suspected_isolation_flag"].eq(1), "cycle"].astype(int).tolist()
+        backend_interruption_cycles = group.loc[group["backend_interruption_flag"].eq(1), "cycle"].astype(int).tolist()
+
+        if backend_isolation_cycles:
+            backend_diagnosis = "BACKEND_ISOLATION_DETECTED"
+        elif backend_suspected_cycles:
+            backend_diagnosis = "BACKEND_ISOLATION_SUSPECTED"
+        elif backend_interruption_cycles:
+            backend_diagnosis = "BACKEND_INTERRUPTION_OR_RECOVERY"
+        else:
+            backend_diagnosis = "BACKEND_COMMUNICATION_HEALTHY"
+
+        uart_diagnosis = (
+            "LOCAL_UART_INTERRUPTION_DETECTED"
+            if uart_cycles else
+            ("UART_STATUS_UNKNOWN" if group["connectivity_unknown_flag"].any() else "UART_CONNECTED")
+        )
+
         diagnoses = []
         if comm_diagnosis != "COMMUNICATION_HEALTHY":
             diagnoses.append(comm_diagnosis)
@@ -443,6 +556,10 @@ def make_summary(df, events):
             diagnoses.append(battery_diagnosis)
         if data_diagnosis == "DATA_INCONSISTENCY_DETECTED":
             diagnoses.append(data_diagnosis)
+        if uart_diagnosis == "LOCAL_UART_INTERRUPTION_DETECTED":
+            diagnoses.append(uart_diagnosis)
+        if backend_diagnosis != "BACKEND_COMMUNICATION_HEALTHY":
+            diagnoses.append(backend_diagnosis)
 
         if diagnoses:
             overall = "ABNORMAL: " + " | ".join(diagnoses)
@@ -469,9 +586,89 @@ def make_summary(df, events):
             "data_affected_cycles": ", ".join(map(str, data_cycles)),
             "data_diagnosis": data_diagnosis,
             "communication_affected_cycles": ", ".join(map(str, comm_cycles)),
+            "uart_interruption_cycles": ", ".join(map(str, uart_cycles)),
+            "uart_diagnosis": uart_diagnosis,
+            "backend_isolation_cycles": ", ".join(map(str, backend_isolation_cycles)),
+            "backend_suspected_isolation_cycles": ", ".join(map(str, backend_suspected_cycles)),
+            "backend_interruption_cycles": ", ".join(map(str, backend_interruption_cycles)),
+            "backend_diagnosis": backend_diagnosis,
             "overall_sensor_diagnosis": overall,
         })
     return pd.DataFrame(rows)
+
+
+
+def print_intended_condition_verification(summary):
+    """
+    Print whether the intended S3 and S5 abnormal scenarios were detected.
+    This verifies Stage 6 diagnosis labels, not physical sensor failure.
+    """
+    print("\nINTENDED ABNORMAL CONDITION VERIFICATION")
+    print("=" * 68)
+
+    indexed = summary.set_index("sensor_id", drop=False)
+
+    # S3: communication abnormality and confirmed backend isolation.
+    if "S3" in indexed.index:
+        s3 = indexed.loc["S3"]
+        s3_comm = str(s3["communication_diagnosis"]).upper()
+        s3_backend = str(s3["backend_diagnosis"]).upper()
+
+        communication_detected = s3_comm in {
+            "PERSISTENT_COMMUNICATION_DEGRADATION",
+            "RECURRENT_TRANSIENT_COMMUNICATION_ANOMALIES",
+            "TRANSIENT_COMMUNICATION_ANOMALIES",
+            "COMMUNICATION_ISOLATION_DETECTED",
+        }
+        backend_isolation_detected = (
+            s3_backend == "BACKEND_ISOLATION_DETECTED"
+        )
+        s3_detected = communication_detected and backend_isolation_detected
+
+        print("\nS3 - COMMUNICATION ABNORMALITY AND BACKEND ISOLATION")
+        print("Expected: Communication abnormality and backend isolation")
+        print(f"Communication diagnosis: {s3_comm}")
+        print(f"Backend diagnosis: {s3_backend}")
+        print(f"Communication abnormality detected: {'YES' if communication_detected else 'NO'}")
+        print(f"Backend isolation detected: {'YES' if backend_isolation_detected else 'NO'}")
+        print(f"Overall S3 scenario: {'DETECTED' if s3_detected else 'NOT FULLY DETECTED'}")
+    else:
+        s3_detected = False
+        print("\nS3 - COMMUNICATION ABNORMALITY AND BACKEND ISOLATION")
+        print("Expected sensor S3 was not found in the summary.")
+        print("Overall S3 scenario: NOT DETECTED")
+
+    # S5: battery warning/fault condition.
+    if "S5" in indexed.index:
+        s5 = indexed.loc["S5"]
+        s5_battery = str(s5["battery_diagnosis"]).upper()
+        s5_warning_cycles = int(s5["battery_warning_cycles"])
+        s5_detected = (
+            s5_battery == "BATTERY_PROBLEM"
+            and s5_warning_cycles > 0
+        )
+
+        print("\nS5 - GRADUAL BATTERY DEPLETION")
+        print("Expected: Gradual battery depletion")
+        print(f"Battery diagnosis: {s5_battery}")
+        print(f"Battery warning/fault cycles: {s5_warning_cycles}")
+        print(f"Low-battery condition detected: {'YES' if s5_detected else 'NO'}")
+    else:
+        s5_detected = False
+        print("\nS5 - GRADUAL BATTERY DEPLETION")
+        print("Expected sensor S5 was not found in the summary.")
+        print("Low-battery condition detected: NO")
+
+    print("\n" + "=" * 68)
+    if s3_detected and s5_detected:
+        print("SCENARIO VERIFICATION: SUCCESS")
+        print("Both intended abnormal conditions were detected by Stage 6.")
+    else:
+        print("SCENARIO VERIFICATION: REVIEW REQUIRED")
+        print("At least one intended abnormal condition was not fully detected.")
+
+    print("Note: This confirms rule-based diagnosis labels, not physical sensor failure.")
+    return s3_detected and s5_detected
 
 
 def make_network_summary(df, summary):
@@ -485,6 +682,9 @@ def make_network_summary(df, summary):
             "sensors_isolated": int(group["communication_isolated_flag"].sum()),
             "sensors_with_battery_problem": int(group["battery_fault_flag"].sum()),
             "sensors_with_data_inconsistency": int(group["data_inconsistency_flag"].sum()),
+            "sensors_with_uart_interruption": int(group["uart_interruption_flag"].sum()),
+            "sensors_with_backend_isolation": int(group["backend_isolation_flag"].sum()),
+            "sensors_with_suspected_backend_isolation": int(group["backend_suspected_isolation_flag"].sum()),
             "sensors_with_any_fault": int(group["any_fault_flag"].sum()),
         })
     return pd.DataFrame(rows)
@@ -494,13 +694,14 @@ def main():
     try:
         print("\nQGUARD INTEGRATED FAULT DETECTION + TEMPORAL ANALYSIS")
         print("=" * 68)
-        features, comm, battery, motion = load_inputs()
+        features, comm, battery, motion, connectivity = load_inputs()
         print(f"Feature records: {len(features)}")
         print(f"Communication-source records: {len(comm)}")
         print(f"Battery records: {len(battery)}")
         print(f"Motion records: {len(motion)}")
+        print(f"Connectivity records: {len(connectivity)}")
 
-        df = merge_sources(features, comm, battery, motion)
+        df = merge_sources(features, comm, battery, motion, connectivity)
         df = normalise_and_flag(df)
         events = make_event_table(df)
         summary = make_summary(df, events)
@@ -522,14 +723,22 @@ def main():
             "transient_communication_events", "persistent_communication_events",
             "battery_diagnosis", "battery_warning_cycles",
             "data_diagnosis", "data_inconsistency_cycles",
+            "uart_diagnosis", "backend_diagnosis",
             "overall_sensor_diagnosis"
         ]
         print(summary[display_cols].to_string(index=False))
+
+        # Verify the intentionally configured S3 and S5 scenarios.
+        print_intended_condition_verification(summary)
 
         print("\nCYCLE-WISE CHECKS")
         print("Communication degraded:", int(df["communication_degraded_flag"].sum()))
         print("Battery warning/fault:", int(df["battery_fault_flag"].sum()))
         print("Data inconsistencies:", int(df["data_inconsistency_flag"].sum()))
+        print("UART interruption cycles:", int(df["uart_interruption_flag"].sum()))
+        print("Confirmed backend isolation cycles:", int(df["backend_isolation_flag"].sum()))
+        print("Suspected backend isolation cycles:", int(df["backend_suspected_isolation_flag"].sum()))
+        print("Backend interruption/recovery cycles:", int(df["backend_interruption_flag"].sum()))
         print("Communication recoveries:", int(df["communication_recovery_flag"].sum()))
         print("Missing feature records:", int((df["feature_record_available"] == 0).sum()))
         print("Missing communication monitor records:", int((df["communication_record_available"] == 0).sum()))

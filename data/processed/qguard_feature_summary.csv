@@ -1,6 +1,6 @@
 sensor_id,record_count,presence_detections,no_presence_records,distance_available_records,presence_distance_inconsistencies,presence_transitions,minimum_detected_distance_m,maximum_detected_distance_m,average_rssi_dbm,average_response_time_ms,average_battery_percent,total_missed_messages
-S1,200,10,190,10,0,2,4.01,4.23,-47.985,60.15905,96.4921,4
-S2,200,18,182,18,0,4,2.78,4.27,-55.07,66.3412,96.48734999999999,3
-S3,200,15,185,55,40,8,2.27,4.29,-66.49,73.72314999999999,96.4852,151
+S1,200,10,190,10,0,2,3.5,3.5,-47.985,60.15905,96.4921,4
+S2,200,18,182,18,0,4,3.0,3.5,-55.07,66.3412,96.48734999999999,3
+S3,200,15,185,55,40,8,3.0,3.5,-66.49,73.72314999999999,96.4852,151
 S4,200,0,200,0,0,0,,,-55.9,68.2409,96.48305,3
-S5,200,6,194,6,0,2,4.02,4.26,-49.245,60.425200000000004,61.015,4
+S5,200,6,194,6,0,2,3.5,3.5,-49.245,60.425200000000004,61.015,4

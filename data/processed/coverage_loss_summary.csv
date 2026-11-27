@@ -1,0 +1,2 @@
+area_width_m,area_height_m,total_area_m2,normal_sensor_radius_m,grid_resolution_m,cycles_analysed,baseline_covered_area_m2,baseline_coverage_percent,cycles_with_accessible_coverage_loss,cycles_with_incomplete_diagnostic_status,average_coverage_lost_area_m2,maximum_coverage_lost_area_m2,coverage_loss_method
+22.0,22.0,484.0,3.5,0.1,200,192.4,39.75,9,0,1.7327,38.52,GRID_BASED_CIRCLE_UNION

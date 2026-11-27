@@ -1,0 +1,6 @@
+sensor_id,x_m,y_m,normal_radius_m,nominal_circular_footprint_m2,individual_unique_accessible_coverage_lost_if_data_unavailable_m2,data_unavailable_cycles,data_unavailability_reason_counts
+S1,15.449747468305834,15.449747468305834,3.5,38.4845,38.47,0,
+S2,15.449747468305834,5.550252531694167,3.5,38.4845,38.47,0,
+S3,10.5,10.5,3.5,38.4845,38.52,6,BACKEND_ISOLATED: 6
+S4,5.550252531694168,15.449747468305834,3.5,38.4845,38.47,3,UART_INTERRUPTED: 3
+S5,5.550252531694168,5.550252531694167,3.5,38.4845,38.47,0,

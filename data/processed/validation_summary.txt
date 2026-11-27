@@ -35,7 +35,7 @@ no_presence_and_missing_distance: 911
 presence_but_missing_distance: 0
 no_presence_but_distance_recorded: 40
 presence_with_distance_recorded: 49
-maximum_target_distance_m: 4.29
+maximum_target_distance_m: 3.5
 
 FLAGGED RECORDS
 ------------------------------------------------------------

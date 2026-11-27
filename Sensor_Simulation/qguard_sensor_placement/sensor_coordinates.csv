@@ -1,6 +1,0 @@
-sensor_id,x_m,y_m,placement_role
-S1,5.0,7.6,upper_left
-S2,10.5,7.6,upper_right
-S3,7.5,6.0,centre
-S4,10.5,4.2,lower_right
-S5,5.0,4.2,lower_left

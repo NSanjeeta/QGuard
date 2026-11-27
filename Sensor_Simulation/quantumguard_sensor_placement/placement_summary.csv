@@ -1,0 +1,13 @@
+metric,value
+monitoring_area_m2,441.0
+normal_radius_m,3.5
+grid_resolution_m,0.1
+optimised_rotation_degrees,0.0
+covered_area_m2,192.40000000000003
+uncovered_area_m2,248.60000000000005
+overlap_area_m2,0.0
+coverage_percentage,43.628117913832206
+worst_nearest_sensor_distance_m,7.7785317267988505
+worst_uncovered_gap_depth_m,4.2785317267988505
+normal_overlap_constraint_satisfied,True
+scope,Normal mode only; no 6 m calculations performed.
